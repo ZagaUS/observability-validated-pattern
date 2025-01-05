@@ -1,0 +1,15 @@
+replicaCount: 1
+image:
+  repository: quay.io/zagaos/admin-dashboard-observai
+  tag: "7dd059a"
+  pullPolicy: IfNotPresent
+service:
+  type: ClusterIP
+  port: 8080
+
+route:
+  enabled: true
+  subdomainName: admin-dashboard
+
+dashboard:
+  enabled: true

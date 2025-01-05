@@ -1,0 +1,15 @@
+replicaCount: 1
+image:
+  repository: quay.io/zagaos/zagaobserve-edge-keycloak
+  tag: "feea355"
+  pullPolicy: IfNotPresent
+service:
+  type: ClusterIP
+  port: 8080
+
+route:
+  enabled: true
+  subdomainName: edge-keycloak
+
+edgeKeycloak:
+  enabled: true

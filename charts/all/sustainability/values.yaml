@@ -1,0 +1,87 @@
+sustain-ingestion-nodepowerlevel:
+  replicaCount: 1
+  image:
+    repository: "quay.io/zagaos/zagaobserve-sustain-ingestion"
+    tag: "eecc69c-20241206110103"
+    pullPolicy: IfNotPresent
+  configmapEnv:
+    data:
+      ACCESS_KEY: minioAdmin
+      KAFKA_BOOTSTRAP_SERVER: 'telemetry-kafka-bootstrap.observability-kafka.svc.cluster.local:9092'
+      S3_ENDPOINT: 'http://minio.observability-datamesh.svc.cluster.local:9000'
+      SECRET_KEY: minio1234
+      URI: 'thrift://hive-metastore.observability-datamesh.svc.cluster.local:9083'
+      TABLE_NAME: node
+      NAME_SPACE: sustainability_node
+      CONSUMER_GROUP_ID: sustain
+      SCRIPT_TO_RUN: nodepowerlevel
+      KAFKA_TOPIC: nodepowerlevel
+      MINIO_BUCKET: powerlevel-node
+      BUCKET_NAME: s3a://powerlevel-node/powerdata
+      SSL: True
+######################
+sustain-ingestion-podpowerlevel:
+  replicaCount: 1
+  image:
+    repository: "quay.io/zagaos/zagaobserve-sustain-ingestion"
+    tag: "eecc69c-20241206110103"
+    pullPolicy: IfNotPresent
+  configmapEnv:
+    data:
+      ACCESS_KEY: minioAdmin
+      KAFKA_BOOTSTRAP_SERVER: 'telemetry-kafka-bootstrap.observability-kafka.svc.cluster.local:9092'
+      S3_ENDPOINT: 'http://minio.observability-datamesh.svc.cluster.local:9000'
+      SECRET_KEY: minio1234
+      URI: 'thrift://hive-metastore.observability-datamesh.svc.cluster.local:9083'
+      BUCKET_NAME: 's3a://powerlevel-data/powerdatas'
+      CONSUMER_GROUP_ID: sustain
+      KAFKA_TOPIC: containerpowerlevel
+      NAME_SPACE: sustainability_pod
+      SCRIPT_TO_RUN: podpowerlevel
+      TABLE_NAME: pod
+      SSL: False
+      MINIO_BUCKET: powerlevel-data
+#####################
+sustain-query-api:
+  replicaCount: 1
+  image:
+    repository: "quay.io/zagaos/zagaobserve-sustain-query"
+    tag: "1e8de54-20241218062108"
+    pullPolicy: IfNotPresent
+  service:
+    type: ClusterIP
+    port: 8000
+  route:
+    subdomain: sustain-query
+  configmapEnv:
+    data:
+      SUSTAIN_TABLE_NAME: iceberg.sustainability_pod.pod
+      NODE_TABLE_NAME: iceberg.sustainability_node.node
+      TRINO_HOST: admin@trino-coordinator.observability-datamesh.svc.cluster.local
+######################
+sustain-dashboard:
+  replicaCount: 1
+  image:
+    repository: "quay.io/zagaos/zagaobserve-sustain-dashboard"
+    tag: "ba6481a-20241218100046"
+    pullPolicy: IfNotPresent
+  service:
+    type: ClusterIP
+    port: 8080
+  route:
+    subdomain: sustain-dashboard
+#########
+query:
+  enabled: false
+dashboard:
+  enabled: true
+ingestion:
+  enabled: false
+sustain-ingestion-nodepowerlevel-api:
+  image:
+    repository: quay.io/zagaos/zagaobserve-sustain-ingestion
+    tag: 2ed20f6-20241218091356
+sustain-ingestion-podpowerlevel-api:
+  image:
+    repository: quay.io/zagaos/zagaobserve-sustain-ingestion
+    tag: 2ed20f6-20241218091356

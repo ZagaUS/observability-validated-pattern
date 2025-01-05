@@ -1,0 +1,78 @@
+admin-dashboard:
+  enabled: true
+  replicaCount: 1
+  image:
+    repository: "quay.io/zagaos/zagaobserve-admin-dashboard"
+    tag: "802867f-20241219101313"
+    pullPolicy: IfNotPresent
+  service:
+    type: ClusterIP
+    port: 8080
+
+  route:
+    enabled: true
+    subdomainName: admin-dashboard
+
+
+admin-backend:
+  enabled: false
+  replicaCount: 1
+  image:
+    repository: "quay.io/zagaos/zagaobserve-admin-backend"
+    tag: "66dbe37-20241218094940"
+    pullPolicy: IfNotPresent
+
+  service:
+    type: ClusterIP
+    port: 8000
+
+  route:
+    enabled: true
+    subdomainName: admin-backend
+
+  configmapEnv:
+    data:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin123$
+      POSTGRES_HOST: admin-postgres.observability-edge.svc.cluster.local
+      POSTGRES_PORT: '5432'
+      POSTGRES_DB: admindb
+      POSTGRESQL_ADMIN_PASSWORD: Admin123$
+
+admin-postgres:
+
+  replicaCount: 1
+
+  image:
+    repository: "quay.io/osclimate/postgresql-13"
+    tag: "1-101"
+
+  strategy:
+    type: {}
+
+  service:
+    type: ClusterIP
+
+  securityContext: {}
+
+  secretEnv:
+    data:
+      POSTGRESQL_USER: admin
+      POSTGRESQL_PASSWORD: admin123$
+      POSTGRESQL_DATABASE: admindb
+      POSTGRESQL_ADMIN_PASSWORD: Admin123$
+    type: Opaque
+
+  volumes:
+    storageSize: 2Gi
+    accessModes:
+      - ReadWriteOnce
+
+  postgres:
+    enabled: true
+      
+  backend:
+    enabled: false
+
+  dashboard:
+    enabled: true

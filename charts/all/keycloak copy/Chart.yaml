@@ -1,0 +1,34 @@
+apiVersion: v2
+name: keycloak
+description: A Helm chart for Kubernetes
+
+version: 1.0.0
+
+dependencies:
+- name: apm-keycloak
+  version: "1.0.0"
+  repository: "file://charts/apm-keycloak"
+  condition: subcharts.apm-keycloak
+  tags:
+  - apm-keycloak
+
+- name: infra-keycloak
+  version: "1.0.0"
+  repository: "file://charts/infra-keycloak"
+  condition: subcharts.infra-keycloak
+  tags:
+  - infra-keycloak
+
+- name: casemanage-keycloak
+  version: "1.0.0"
+  repository: "file://charts/casemanage-keycloak"
+  condition: subcharts.casemanage-keycloak
+  tags:
+  - casemanage-keycloak
+
+- name: edge-keycloak
+  version: "1.0.0"
+  repository: "file://charts/edge-keycloak"
+  condition: subcharts.edge-keycloak
+  tags:
+  - edge-keycloak

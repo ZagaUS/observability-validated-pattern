@@ -1,0 +1,29 @@
+image: ghcr.io/open-telemetry/opentelemetry-collector-releases/opentelemetry-collector-contrib:0.107.0
+resources:
+  limits:
+    cpu: 750m
+    memory: 500Mi
+  requests:
+    cpu: 700m
+    memory: 450Mi
+kafka:
+  brokers:
+    - telemetry-kafka-bootstrap.observability-kafka.svc.cluster.local:9092
+  protocolVersion: 3.4.0
+  producerMaxMessageBytes: 9000000
+nodeStatsTopic: nodestats
+podStatsTopic: podstats
+tolerations:
+  - effect: NoSchedule
+    key: node-role.kubernetes.io/master
+
+clusterRole:
+  name: "infra-otel-role"
+
+clusterRoleBinding:
+  name: "infra-otel-rb"
+
+serviceAccount:
+  name: "infra-telemetry-collector"
+  namespace: "observability-otel"
+

@@ -1,0 +1,19 @@
+replicaCount: 1
+image:
+  repository: quay.io/zagaos/zagaobserve-casemanage-dashboard
+  tag: "latest"
+  pullPolicy: IfNotPresent
+service:
+  type: ClusterIP
+  port: 8080
+route:
+  subdomain: casemanage-dashboard
+backend:
+  enabled: false
+
+configMap:
+  data:
+    VITE_APP_API_BASE_URL: https://casemanage-backend1.apps.rosa-8grhg.ssnp.p1.openshiftapps.com
+
+dashboard:
+  enabled: true

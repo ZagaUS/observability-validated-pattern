@@ -1,0 +1,106 @@
+apiVersion: opentelemetry.io/v1beta1
+kind: OpenTelemetryCollector
+metadata:
+  name: {{ .Chart.Name }}
+spec:
+  mode: {{ .Values.mode }}
+  replicas: {{ .Values.replicas }}
+  image: {{ .Values.image }}
+  podDisruptionBudget:
+    maxUnavailable: 1
+  observability:
+    metrics: {}
+  config: 
+    receivers:
+      otlp:
+        protocols:
+          grpc:
+            endpoint: {{ .Values.receiver.grpcEndpoint }}
+          http:
+            endpoint: {{ .Values.receiver.httpEndpoint }}
+
+      prometheus:
+        config:
+          scrape_configs:
+            - job_name: kepler
+              scrape_interval: 2s
+              static_configs:
+                - targets:
+                    - 'kepler.openshift-power-monitoring.svc.cluster.local:9103'
+    processors:
+      filter/container-powerlevel:
+        metrics:
+          include:
+            match_type: strict
+            metric_names:
+              - kepler_container_joules_total
+              - kepler_container_other_joules_total
+              - kepler_container_platform_joules_total
+              - kepler_container_package_joules_total
+              - kepler_container_core_joules_total
+              - kepler_container_dram_joules_total
+              - kepler_container_gpu_joules_total
+
+      filter/node-powerlevel:
+        metrics:
+          include:
+            match_type: strict
+            metric_names:
+              - kepler_node_joules_total
+      resourcedetection/openshift:
+        detectors:
+          - openshift
+      
+    exporters:
+      debug:
+        verbosity: detailed
+
+      kafka/container-powerlevel:
+        topic: {{ .Values.exporters.kafka.containerTopic }}
+        brokers:
+          - {{ .Values.exporters.kafka.brokers }}
+        encoding: {{ .Values.exporters.kafka.encoding }}
+        protocol_version: {{ .Values.exporters.kafka.version }}
+        producer:
+          max_message_bytes: {{ .Values.exporters.kafka.max_message_bytes}}
+
+
+      kafka/node-powerlevel:
+        topic: {{ .Values.exporters.kafka.nodeTopic }}
+        brokers:
+          - {{ .Values.exporters.kafka.brokers }}
+        encoding: {{ .Values.exporters.kafka.encoding }}
+        protocol_version: {{ .Values.exporters.kafka.version }}
+        producer:
+          max_message_bytes: {{ .Values.exporters.kafka.max_message_bytes}}
+
+    service:
+      pipelines:
+        metrics/container-powerlevel:
+          receivers:
+            - prometheus
+          processors:
+            - filter/container-powerlevel
+            - resourcedetection/openshift
+          exporters:
+          {{- if .Values.containerExporter.enabled }}
+            - debug
+            - kafka/container-powerlevel
+          {{- else }}
+            - debug
+          {{- end }}
+
+        metrics/node-powerlevel:
+          receivers:
+            - prometheus
+          processors:
+            - filter/container-powerlevel
+            - resourcedetection/openshift
+          exporters:
+          {{- if .Values.nodeExporter.enabled }}
+            - debug
+            - kafka/node-powerlevel
+          {{- else }}
+            - debug
+          {{- end }}
+####################################################################################
