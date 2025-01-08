@@ -3,7 +3,7 @@ replicaCount: 1
 image:
   repository: "quay.io/osclimate/minio"
   tag: "latest"
-
+namespace: observability-datamesh
 strategy:
   type: {}
 

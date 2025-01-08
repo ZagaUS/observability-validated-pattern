@@ -1,9 +1,10 @@
 replicaCount: 1
 
 image:
-  repository: quay.io/zagaos/sustain-ingestion
-  tag: latest
+  repository:  quay.io/zagaos/zagaobserve-sustain-ingestion
+  tag: v1
   pullPolicy: IfNotPresent
+namespace: observability-edge
 
 configmapEnv:
   data:

@@ -3,8 +3,9 @@ casemgt-backend-api:
   replicaCount: 1
   image:
     repository: "quay.io/zagaos/zagaobserve-casemanage-backend"
-    tag: "b3e9f25-20241218060635"
+    tag: "v3"
     pullPolicy: IfNotPresent
+  namespace: observability-edge
   service:
     type: ClusterIP
     port: 8080
@@ -30,30 +31,27 @@ casemgt-dashboard:
   replicaCount: 1
   image:
     repository: "quay.io/zagaos/zagaobserve-casemanage-dashboard"
-    tag: "322fa64-20241218061448"
+    tag: "v6"
     pullPolicy: IfNotPresent
+  namespace: observability-datamesh
+  
   service:
     type: ClusterIP
     port: 8000
   route:
     enabled: true
     subdomain: casemanage-dashboard
-  configMap:
-    data:
-      VITE_APP_API_BASE_URL: https://casemanage-backend1.apps.rosa-8grhg.ssnp.p1.openshiftapps.com
-
-
-
+  
 casemgt-postgres:
   replicaCount: 1
 
   image:
     repository: "quay.io/osclimate/postgresql-13"
     tag: "1-101"
+  namespace: observability-datamesh
 
   strategy:
     type: {}
-
   service:
     type: ClusterIP
 
@@ -77,7 +75,7 @@ casemanagedb:
 
 
 backend:
-  enabled: true
+  enabled: false
 
 dashboard:
   enabled: true

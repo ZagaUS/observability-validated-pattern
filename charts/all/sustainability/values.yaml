@@ -2,8 +2,9 @@ sustain-ingestion-nodepowerlevel:
   replicaCount: 1
   image:
     repository: "quay.io/zagaos/zagaobserve-sustain-ingestion"
-    tag: "eecc69c-20241206110103"
+    tag: "v2"
     pullPolicy: IfNotPresent
+  namespace: observability-edge
   configmapEnv:
     data:
       ACCESS_KEY: minioAdmin
@@ -24,8 +25,10 @@ sustain-ingestion-podpowerlevel:
   replicaCount: 1
   image:
     repository: "quay.io/zagaos/zagaobserve-sustain-ingestion"
-    tag: "eecc69c-20241206110103"
+    tag: "v2"
     pullPolicy: IfNotPresent
+  namespace: observability-edge
+
   configmapEnv:
     data:
       ACCESS_KEY: minioAdmin
@@ -46,8 +49,10 @@ sustain-query-api:
   replicaCount: 1
   image:
     repository: "quay.io/zagaos/zagaobserve-sustain-query"
-    tag: "1e8de54-20241218062108"
+    tag: "v3"
     pullPolicy: IfNotPresent
+  namespace: observability-edge
+
   service:
     type: ClusterIP
     port: 8000
@@ -63,8 +68,10 @@ sustain-dashboard:
   replicaCount: 1
   image:
     repository: "quay.io/zagaos/zagaobserve-sustain-dashboard"
-    tag: "ba6481a-20241218100046"
+    tag: "v3"
     pullPolicy: IfNotPresent
+  namespace: observability-edge
+  
   service:
     type: ClusterIP
     port: 8080
@@ -76,12 +83,12 @@ query:
 dashboard:
   enabled: true
 ingestion:
-  enabled: false
+  enabled: true
 sustain-ingestion-nodepowerlevel-api:
   image:
     repository: quay.io/zagaos/zagaobserve-sustain-ingestion
-    tag: 2ed20f6-20241218091356
+    tag: v2
 sustain-ingestion-podpowerlevel-api:
   image:
     repository: quay.io/zagaos/zagaobserve-sustain-ingestion
-    tag: 2ed20f6-20241218091356
+    tag: v2

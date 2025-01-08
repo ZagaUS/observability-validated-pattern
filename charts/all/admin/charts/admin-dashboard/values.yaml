@@ -1,8 +1,9 @@
 replicaCount: 1
 image:
-  repository: quay.io/zagaos/admin-dashboard-observai
-  tag: "7dd059a"
+  repository: quay.io/zagaos/zagaobserve-admin-dashboard
+  tag: "v4"
   pullPolicy: IfNotPresent
+namespace: observability-edge
 service:
   type: ClusterIP
   port: 8080

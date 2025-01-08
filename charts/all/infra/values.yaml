@@ -1,9 +1,10 @@
 infra-ingestion-node:
   replicaCount: 1
   image:
-    repository: "quay.io/zagaos/zagaobserver-infra-ingestion"
-    tag: "79997b4-20241218054202"
+    repository: "quay.io/zagaos/zagaobserve-infra-ingestion"
+    tag: "v1"
     pullPolicy: IfNotPresent
+  namespace: observability-edge
   configmapEnv:
     data:
       KAFKA_TOPIC: nodestats
@@ -23,9 +24,11 @@ infra-ingestion-node:
 infra-ingestion-pod:
   replicaCount: 1
   image:
-    repository: "quay.io/zagaos/zagaobserver-infra-ingestion"
-    tag: "79997b4-20241218054202"
+    repository: "quay.io/zagaos/zagaobserve-infra-ingestion"
+    tag: "v1"
     pullPolicy: IfNotPresent
+  namespace: observability-edge
+  
   configmapEnv:
     data:
       KAFKA_TOPIC: podstats
@@ -45,9 +48,11 @@ infra-ingestion-pod:
 infra-ingestion-events:
   replicaCount: 1
   image:
-    repository: "quay.io/zagaos/zagaobserver-infra-ingestion"
-    tag: "79997b4-20241218054202"
+    repository: "quay.io/zagaos/zagaobserve-infra-ingestion"
+    tag: "v1"
     pullPolicy: IfNotPresent
+  namespace: observability-edge
+  
   configmapEnv:
     data:
       KAFKA_TOPIC: k8sevents
@@ -67,9 +72,11 @@ infra-ingestion-events:
 infra-query-api:
   replicaCount: 1
   image:
-    repository: "quay.io/zagaos/zagaobserver-infra-query"
-    tag: "069eba6-20241217081715"
+    repository: "quay.io/zagaos/zagaobserve-infra-query"
+    tag: "v1"
     pullPolicy: IfNotPresent
+  namespace: observability-edge
+  
   service:
     type: ClusterIP
     port: 8000
@@ -86,9 +93,11 @@ infra-query-api:
 infra-dashboard:
   replicaCount: 1
   image:
-    repository: "quay.io/zagaos/zagaobserver-infra-dashboard"
-    tag: "7d57f1c-20241218053713"
+    repository: "quay.io/zagaos/zagaobserve-infra-dashboard"
+    tag: "v10"
     pullPolicy: IfNotPresent
+  namespace: observability-edge
+  
   service:
     type: ClusterIP
     port: 8080
@@ -97,6 +106,6 @@ infra-dashboard:
 ingestion:
   enabled: true
 dashboard:
-  enabled: false
+  enabled: true
 query:
-  enabled: false
+  enabled: true

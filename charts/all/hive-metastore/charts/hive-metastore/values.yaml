@@ -4,7 +4,7 @@ image:
   repository: quay.io/osclimate/hive-metastore
   tag: latest
   pullPolicy: IfNotPresent
-
+namespace: observability-datamesh
 s3Connection:
   S3_PREFIX: data
   S3_BUCKET: zaga

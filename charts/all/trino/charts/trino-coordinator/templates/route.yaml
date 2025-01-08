@@ -5,6 +5,8 @@ metadata:
   name: {{ .Chart.Name }}
   labels:
     app: {{ .Chart.Name }}
+  namespace: {{ .Values.namespace }}
+
 spec:
   subdomain: {{ .Values.route.subdomain }}
   to:

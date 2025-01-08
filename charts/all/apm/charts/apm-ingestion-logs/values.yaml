@@ -4,6 +4,8 @@ image:
   repository: quay.io/zagaos/apm-ingestion-pyiceberg
   tag: 109fc4e
   pullPolicy: IfNotPresent
+namespace: observability-edge
+
 configmapEnv:
   data:
     BUCKET_NAME: 's3a://observability-apm-logs/logs'

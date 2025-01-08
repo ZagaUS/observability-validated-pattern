@@ -5,6 +5,8 @@ metadata:
   labels:
     app: central-redis
     release: {{ .Release.Name }}
+  namespace: {{ .Values.namespace }}
+  
 spec:
   type: {{ .Values.service.type }}
   ports:

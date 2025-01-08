@@ -33,6 +33,7 @@ trino-coordinator:
     repository: "quay.io/osclimate/trino"
     tag: "latest"
     pullPolicy: IfNotPresent
+  namespace: observability-datamesh
 
   strategy: 
     type: Recreate
@@ -119,6 +120,7 @@ trino-worker:
     repository: "quay.io/osclimate/trino"
     tag: "latest"
     pullPolicy: IfNotPresent
+  namespace: observability-datamesh
 
   strategy: 
     type: Recreate

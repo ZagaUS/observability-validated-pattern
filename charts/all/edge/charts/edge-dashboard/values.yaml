@@ -1,8 +1,9 @@
 replicaCount: 1
 image:
-  repository: quay.io/zagaos/observe-edge-dashboard
-  tag: "latest"
+  repository: quay.io/zagaos/zagaobserve-edge-dashboard
+  tag: "v3"
   pullPolicy: IfNotPresent
+namespace: observability-edge
 service:
   type: ClusterIP
   port: 8080

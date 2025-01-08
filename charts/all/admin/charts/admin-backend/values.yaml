@@ -4,7 +4,7 @@ image:
   repository: quay.io/zagaos/admin-backend-pyiceberg
   tag: v23
   pullPolicy: IfNotPresent
-
+namespace: observability-edge
 service:
   type: ClusterIP
   port: 8000

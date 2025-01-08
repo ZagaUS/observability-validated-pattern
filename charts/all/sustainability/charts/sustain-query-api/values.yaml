@@ -4,6 +4,7 @@ image:
   repository: quay.io/zagaos/sustain-query
   tag: latest
   pullPolicy: IfNotPresent
+namespace: observability-edge
 
 service:
   type: ClusterIP

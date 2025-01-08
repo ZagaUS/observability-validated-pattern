@@ -1,9 +1,10 @@
 replicaCount: 1
 
 image:
-  repository: quay.io/zagaos/infra-query
-  tag: latest
+  repository: quay.io/zagaos/zagaobserver-infra-query
+  tag: v2
   pullPolicy: IfNotPresent
+namespace: observability-edge
 
 service:
   type: ClusterIP

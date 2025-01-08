@@ -4,6 +4,7 @@ image:
   repository: "quay.io/osclimate/trino"
   tag: "latest"
   pullPolicy: IfNotPresent
+namespace: observability-datamesh
 
 strategy: 
   type: Recreate

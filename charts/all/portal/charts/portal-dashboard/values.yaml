@@ -3,6 +3,8 @@ image:
   repository: quay.io/zagaos/zagaobserve-portal-dashboard
   tag: "latest"
   pullPolicy: IfNotPresent
+namespace: observability-edge
+
 service:
   type: ClusterIP
   port: 8080

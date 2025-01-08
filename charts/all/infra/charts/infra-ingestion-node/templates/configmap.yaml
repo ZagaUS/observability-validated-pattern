@@ -5,6 +5,8 @@ metadata:
   name: {{ .Chart.Name }}-configmap
   labels:
     app: {{ .Chart.Name }}
+  namespace: {{ .Values.namespace }}
+  
 data:
 {{- range $key, $value := .Values.configmapEnv.data }}
   {{ $key }}: {{ $value | quote }}

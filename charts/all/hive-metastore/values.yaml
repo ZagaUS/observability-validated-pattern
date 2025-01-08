@@ -15,6 +15,7 @@ hive-metastore-db:
   image:
     repository: "quay.io/osclimate/postgresql-13"
     tag: "1-101"
+  namespace: observability-datamesh
 
   strategy:
     type: {}
@@ -48,6 +49,7 @@ hive-metastore:
     repository: quay.io/osclimate/hive-metastore
     tag: latest
     pullPolicy: IfNotPresent
+  namespace: observability-datamesh
 
   s3ConnectionEnv:
     S3_PREFIX: data

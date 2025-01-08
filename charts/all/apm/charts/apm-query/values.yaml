@@ -3,14 +3,15 @@ replicaCount: 1
 image:
   query:
     name: query-api
-    repository: quay.io/zagaos/observe-apm-query-trino
-    tag: v47
+    repository: quay.io/zagaos/zagaobserve-apm-query
+    tag: v2
     pullPolicy: IfNotPresent
   redis:
     name: redis
     repository: quay.io/zagaos/redis-stack-sidecar
-    tag: 1.1
+    tag: 1.2
     pullPolicy: Always
+namespace: observability-edge
 
 service:
   type: ClusterIP

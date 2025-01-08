@@ -2,9 +2,11 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Chart.Name }}
+  name: {{ .Chart.Name }}-dm
   labels:
     app: {{ .Chart.Name }}
+  namespace: {{ .Values.namespace }}
+  
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
@@ -20,10 +22,17 @@ spec:
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         ports:
         - containerPort: 8080
-        envFrom:
-        - configMapRef:
+        # envFrom:
+        # - configMapRef:
+        #     name: {{ .Chart.Name }}-configmap
+        volumeMounts:
+          - mountPath: /usr/share/nginx/html/config
+            name: casemgt-cm
+      volumes:
+        - name: casemgt-cm
+          configMapRef:
+            defaultMode: 420
             name: {{ .Chart.Name }}-configmap
-
-      
+            optional: true
 
 {{- end }}

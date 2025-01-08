@@ -1,0 +1,17 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: artillery-test-job
+spec:
+  template:
+    spec:
+      containers:
+      - name: artillery-container
+        image: quay.io/zagaos/testcases-script-automate:v3
+        env:
+        - name: PROTOCOL
+          value: "http"
+        - name: CLUSTER_URL
+          value: "apps.rosa-8grhg.ssnp.p1.openshiftapps.com"
+      restartPolicy: Never
+  backoffLimit: 4

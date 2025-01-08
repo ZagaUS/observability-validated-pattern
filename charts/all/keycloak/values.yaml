@@ -1,107 +1,83 @@
-kc:
-  enabled: true
-
-postgres:
-  enabled: true
-
-###################
-keycloak:
+apm-keycloak:
   replicaCount: 1
-
   image:
-    repository: "quay.io/osclimate/keycloak"
-    tag: "22.0.1"
-
-  strategy:
-    type: {}
-
+    repository: "quay.io/zagaos/zagaobserve-apm-keycloak"
+    tag: "62c5a7a-20241218113250"
+    pullPolicy: IfNotPresent
+  namespace: observability-edge
+  
   service:
     type: ClusterIP
+    port: 8080
 
   route:
-    subdomain: keycloak
-
-  securityContext: {}
-
-  postgresDbSecret:
-    data:
-      POSTGRESQL_HOST: keycloakdb
-      POSTGRESQL_USER: keycloak
-      POSTGRESQL_PASSWORD: keycloak123$
-      POSTGRESQL_DB_NAME: keycloakdb
-      POSTGRESQL_PORT: "5432"
-    type: Opaque
-
-  adminSecret:
-    data:
-      KEYCLOAK_ADMIN: admin
-      KEYCLOAK_ADMIN_PASSWORD: admin123$
-    type: Opaque
-
-  keystores:
-    data:
-      - name: tls.crt
-        path: configs/keystores/tls.crt
-      - name: tls.key
-        path: configs/keystores/tls.key
-    type: kubernetes.io/tls
-
-  realms:
-    data:
-      - name: zaga-observability-realms.json
-        path: configs/realms/zaga-observability-realms.json
-    type: Opaque
-
-  probes:
-    readiness:
-        httpGet:
-          path: /health/ready
-          port: 8443
-          scheme: HTTPS
-        initialDelaySeconds: 60
-        timeoutSeconds: 1
-        periodSeconds: 10
-        successThreshold: 2
-        failureThreshold: 3
-    liveness:
-        httpGet:
-          path: /health/live
-          port: 8443
-          scheme: HTTPS
-        initialDelaySeconds: 45
-        timeoutSeconds: 1
-        periodSeconds: 30
-        successThreshold: 1
-        failureThreshold: 12
+    enabled: true
+    subdomainName: apm-keycloak
 
 
-###################################################################
-
-keycloakdb: 
-
+infra-keycloak:
   replicaCount: 1
-
   image:
-    repository: "quay.io/osclimate/postgresql-13"
-    tag: "1-101"
-
-  strategy:
-    type: {}
-
+    repository: "quay.io/zagaos/zagaobserve-infra-keycloak"
+    tag: "5bb194d-20241214050907"
+    pullPolicy: IfNotPresent
+  namespace: observability-edge
+  
   service:
     type: ClusterIP
+    port: 8080
 
-  securityContext: {}
+  route:
+    enabled: true
+    subdomainName: infra-keycloak
 
-  secretEnv:
-    data:
-      POSTGRESQL_USER: keycloak
-      POSTGRESQL_PASSWORD: keycloak123$
-      POSTGRESQL_DATABASE: keycloakdb
-      POSTGRESQL_ADMIN_PASSWORD: admin123$
-    type: Opaque
+casemanage-keycloak:
+  replicaCount: 1
+  image:
+    repository: "quay.io/zagaos/zagaobserve-casemanage-keycloak"
+    tag: "42adbcd-20241218115704"
+    pullPolicy: IfNotPresent
+  namespace: observability-edge
+  
+  service:
+    type: ClusterIP
+    port: 8080
 
-  volumes:
-    storageSize: 2Gi
-    accessModes:
-      - ReadWriteOnce
+  route:
+    enabled: true
+    subdomainName: casemanage-keycloak
+
+
+
+edge-keycloak:
+  replicaCount: 1
+  image:
+    repository: "quay.io/zagaos/zagaobserve-edge-keycloak"
+    tag: "a3eb3c0-20241218045514"
+    pullPolicy: IfNotPresent
+  namespace: observability-edge
+  
+  service:
+    type: ClusterIP
+    port: 8080
+
+  route:
+    enabled: true
+    subdomainName: edge-keycloak
+
+
+
+
+
+casemanageKeycloak:
+  enabled: true
+
+infraKeycloak:
+  enabled: false
+
+
+apmKeycloak:
+  enabled: false
+
+edgeKeycloak:
+  enabled: true

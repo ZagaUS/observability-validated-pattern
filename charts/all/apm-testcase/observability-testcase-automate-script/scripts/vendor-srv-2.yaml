@@ -1,0 +1,15 @@
+config:
+  target: "{{ $processEnvironment.TARGET_URL }}"
+  phases:
+    - duration: 10
+      arrivalRate: 1
+  defaults:
+    headers:
+      content-type: application/json
+
+scenarios:
+  - flow:
+      - get:
+          url: "/vendor/getVendorFromOrder"
+          qs:
+            id: "{{$randomNumber(1,100)}}" # Random integer as vendor ID

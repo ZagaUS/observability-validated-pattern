@@ -1,9 +1,10 @@
 replicaCount: 1
 
 image:
-  repository: quay.io/zagaos/sustain-sustain-podpowerlevelpowerlevel
+  repository: quay.io/zagaos/zagaobserver-infra-ingestion
   tag: latest
   pullPolicy: IfNotPresent
+namespace: observability-edge
 
 configmapEnv:
   data:

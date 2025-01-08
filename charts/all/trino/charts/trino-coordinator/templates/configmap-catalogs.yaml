@@ -5,6 +5,7 @@ metadata:
   name: {{ .Chart.Name }}-catalogs
   labels:
     app: {{ .Chart.Name }}
+  namespace: {{ .Values.namespace }}
 data:
   {{- range .Values.catalogs.data }}
     {{- if and .name .path }}

@@ -5,6 +5,8 @@ metadata:
   name: {{ .Chart.Name }}-configs
   labels:
     app: {{ .Chart.Name }}
+  namespace: {{ .Values.namespace }}
+
 data:
   {{- range .Values.configs.data }}
     {{- if and .name .path }}

@@ -3,8 +3,9 @@ admin-dashboard:
   replicaCount: 1
   image:
     repository: "quay.io/zagaos/zagaobserve-admin-dashboard"
-    tag: "802867f-20241219101313"
+    tag: "v7"
     pullPolicy: IfNotPresent
+  namespace: observability-edge
   service:
     type: ClusterIP
     port: 8080
@@ -19,8 +20,9 @@ admin-backend:
   replicaCount: 1
   image:
     repository: "quay.io/zagaos/zagaobserve-admin-backend"
-    tag: "66dbe37-20241218094940"
+    tag: "v1"
     pullPolicy: IfNotPresent
+  namespace: observability-edge
 
   service:
     type: ClusterIP
@@ -46,6 +48,7 @@ admin-postgres:
   image:
     repository: "quay.io/osclimate/postgresql-13"
     tag: "1-101"
+  namespace: observability-edge
 
   strategy:
     type: {}

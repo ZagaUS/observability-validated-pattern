@@ -6,6 +6,7 @@ image:
   pullPolicy: IfNotPresent
 
 
+namespace: observability-edge
 
 
 configmapEnv:

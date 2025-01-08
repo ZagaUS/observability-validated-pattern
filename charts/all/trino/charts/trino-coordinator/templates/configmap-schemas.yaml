@@ -5,6 +5,8 @@ metadata:
   name: {{ .Chart.Name }}-schemas
   labels:
     app: {{ .Chart.Name }}
+  namespace: {{ .Values.namespace }}
+  
 data:
   {{- range .Values.schemas.data }}
     {{- if and .name .path }}

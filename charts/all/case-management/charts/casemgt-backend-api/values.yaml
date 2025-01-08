@@ -2,9 +2,9 @@ replicaCount: 1
 
 image:
   repository: quay.io/zagaos/zagaobserve-casemanage-backend
-  tag: latest
+  tag: "v3"
   pullPolicy: IfNotPresent
-
+namespace: observability-edge
 service:
   type: ClusterIP
   port: 8000
@@ -29,4 +29,4 @@ backend:
   enabled: true # Set to false if you don't want to deploy casemgt-backend-api
 
 dashboard:
-  enabled: false # Set to false if you don't want to deploy casemgt-dashboard
+  enabled: true # Set to false if you don't want to deploy casemgt-dashboard

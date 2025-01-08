@@ -5,6 +5,8 @@ metadata:
   name: {{ .Chart.Name }}
   labels:
     app: {{ .Chart.Name }}
+  namespace: {{ .Values.namespace }}
+  
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
@@ -21,4 +23,14 @@ spec:
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         ports:
         - containerPort: 8080
+        volumeMounts:
+          - mountPath: /usr/share/nginx/html/config
+            name: admin-cm
+      volumes:
+        - name: admin-cm
+          configMap:
+              defaultMode: 420
+              name: {{ .Chart.Name }}-configmap
+              optional: true
+
 {{- end }}

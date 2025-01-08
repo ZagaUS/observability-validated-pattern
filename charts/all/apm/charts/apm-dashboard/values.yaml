@@ -1,15 +1,17 @@
 replicaCount: 1
 image:
   repository: quay.io/zagaos/zagaobserve-apm-dashboard
-  tag: "feea355"
+  tag: "v7"
   pullPolicy: IfNotPresent
+namespace: observability-edge
 service:
   type: ClusterIP
   port: 8080
-
 route:
+  subdomain: apm-dashboard
+  
+backend:
   enabled: true
-  subdomainName: apm-dashboard
 
 dashboard:
   enabled: true

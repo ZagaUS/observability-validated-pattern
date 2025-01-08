@@ -3,8 +3,9 @@ portal-dashboard:
   replicaCount: 1
   image:
     repository: "quay.io/zagaos/zagaobserve-portal-dashboard"
-    tag: "99605ce-20241218062803"
+    tag: "v1"
     pullPolicy: IfNotPresent
+  namespace: observability-edge
   service:
     type: ClusterIP
     port: 8000

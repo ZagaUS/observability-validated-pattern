@@ -4,6 +4,7 @@ apiVersion: security.openshift.io/v1
 kind: SecurityContextConstraints
 metadata:
   name: {{ .Chart.Name }}-scc
+  namespace: {{ .Values.trino-coordinator.namespace }}
 
 allowHostDirVolumePlugin: true
 allowHostIPC: true

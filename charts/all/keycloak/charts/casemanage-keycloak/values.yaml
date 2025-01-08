@@ -1,0 +1,17 @@
+replicaCount: 1
+image:
+  repository: quay.io/zagaos/zagaobserve-casemanage-keycloak
+  tag: "feea355"
+  pullPolicy: IfNotPresent
+namespace: observability-edge
+
+service:
+  type: ClusterIP
+  port: 8080
+
+route:
+  enabled: true
+  subdomainName: casemanage-keycloak
+
+casemanageKeycloak:
+  enabled: true

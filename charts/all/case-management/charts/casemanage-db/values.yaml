@@ -3,7 +3,7 @@ replicaCount: 1
 image:
   repository: "quay.io/osclimate/postgresql-13"
   tag: "1-101"
-
+namespace: observability-edge
 strategy:
   type: {}
 

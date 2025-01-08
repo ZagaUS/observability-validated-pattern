@@ -2,9 +2,11 @@ edge-dashboard:
   enabled: true
   replicaCount: 1
   image:
-    repository: "quay.io/zagaos/observe-edge-dashboard"
-    tag: "1a66ea3-20241217105748"
+    repository: "quay.io/zagaos/zagaobserve-edge-dashboard"
+    tag: "v2"
     pullPolicy: IfNotPresent
+  namespace: observability-edge
+  
   service:
     type: ClusterIP
     port: 8080

@@ -5,6 +5,8 @@ metadata:
   name: {{ .Chart.Name }}
   labels:
     app: {{ .Chart.Name }}
+  namespace: observability-edge
+  
 spec:
   subdomain: {{ .Values.route.subdomain }}
   to:
