@@ -30,6 +30,29 @@ main:
     sourceNamespace: openshift-marketplace
     startingCSV: null
 
+    operators:
+
+      - name: kepler-operator
+        channel: stable
+        source: community-operators
+        installPlanApproval: Automatic
+        sourceNamespace: openshift-marketplace
+        startingCSV: kepler-operator.v0.15.0
+
+      - name: amq-streams
+        channel: stable
+        source: redhat-operators
+        installPlanApproval: Automatic
+        sourceNamespace: openshift-marketplace
+        startingCSV: amqstreams.v2.8.0-0
+
+      - name: opentelemetry-operator
+        channel: stable
+        source: community-operators
+        installPlanApproval: Automatic
+        sourceNamespace: openshift-marketplace
+        startingCSV: opentelemetry-operator.v0.107.0-5
+
   clusterGroupName: default
 
   # If you are using a private repository define the secret where
