@@ -1,0 +1,15 @@
+config:
+  target: "{{ $processEnvironment.TARGET_URL }}"
+  phases:
+    - duration: 10    # Test duration in seconds
+      arrivalRate: 1  # 5 virtual users per second
+  defaults:
+    headers:
+      content-type: application/json
+
+scenarios:
+  - flow:
+      - get:
+          url: "/vendor/vendorGetDataFromExternalApi"
+          qs:
+            id: "{{$randomNumber(1,100)}}"  # Generate a random ID between 1 and 10000

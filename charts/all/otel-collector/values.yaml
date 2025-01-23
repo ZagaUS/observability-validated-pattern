@@ -1,0 +1,170 @@
+#apm collector
+apm-collector:
+  replicas: 1
+  image: 'ghcr.io/open-telemetry/opentelemetry-collector-releases/opentelemetry-collector-contrib:0.107.0'
+  namespace: "observability-otel"
+  # defined for spec
+
+  mode: deployment
+  metrics:
+    enabled: true
+
+  # reciver config
+
+  receiver:
+    grpcEndpoint: 0.0.0.0:4317
+    httpEndpoint: 0.0.0.0:4318
+
+  processors: {}
+
+  # exporter config
+  exporters:
+    kafka:
+      enabled: true
+      logTopic: apmlogs
+      metricTopic: apmmetrics
+      traceTopic: apmtraces
+      brokers: telemetry-kafka-bootstrap.observability-kafka.svc.cluster.local:9092
+      encoding: otlp_json
+      version: 3.7.0
+
+
+  service:
+    receiver: otlp
+    exporters:
+      log: kafka/logs
+      metrics: kafka/metrics
+      traces: kafka/traces
+
+  logExporter:
+    enabled: true
+
+  metricsExporter:
+    enabled: true
+
+  tracesExporter:
+    enabled: true
+
+##################################################################
+
+infra-collector:
+  image: ghcr.io/open-telemetry/opentelemetry-collector-releases/opentelemetry-collector-contrib:0.107.0
+  resources:
+    limits:
+      cpu: 750m
+      memory: 500Mi
+    requests:
+      cpu: 700m
+      memory: 450Mi
+  kafka:
+    brokers:
+      - telemetry-kafka-bootstrap.observability-kafka.svc.cluster.local:9092
+    protocolVersion: 3.4.0
+    producerMaxMessageBytes: 9000000
+  nodeStatsTopic: nodestats
+  podStatsTopic: podstats
+  tolerations:
+    - effect: NoSchedule
+      key: node-role.kubernetes.io/master
+
+  clusterRole:
+    name: "infra-otel-role"
+
+  clusterRoleBinding:
+    name: "infra-otel-rb"
+
+  serviceAccount:
+    name: "infra-telemetry-collector"
+    namespace: "observability-otel"
+
+
+  nodeExporter:
+    enabled: true
+
+  podExporter:
+    enabled: true
+
+
+##########################################################################
+
+
+event-power:
+
+  #infra collector
+
+  replicas: 1
+  image: 'ghcr.io/open-telemetry/opentelemetry-collector-releases/opentelemetry-collector-contrib:0.107.0'
+  # defined for spec
+
+  mode: deployment
+
+
+  # reciver config
+
+  receiver:
+    grpcEndpoint: 0.0.0.0:4317
+    httpEndpoint: 0.0.0.0:4318
+
+
+  # exporter config
+  exporters:
+    kafka:
+      enabled: true
+      eventTopic: k8sevents
+      brokers: telemetry-kafka-bootstrap.observability-kafka.svc.cluster.local:9092
+      version: 3.4.0
+      max_message_bytes: 9000000
+      encoding: otlp_json
+
+
+  logExporter:
+    enabled: true
+
+
+
+
+########################################################################
+
+pod-power:
+
+
+  #pod power collector
+
+  replicas: 1
+  image: 'ghcr.io/open-telemetry/opentelemetry-collector-releases/opentelemetry-collector-contrib:0.107.0'
+  # defined for spec
+
+  mode: deployment
+
+
+  # reciver config
+
+  receiver:
+    grpcEndpoint: 0.0.0.0:4317
+    httpEndpoint: 0.0.0.0:4318
+
+
+  # exporter config
+  exporters:
+    kafka:
+      enabled: true
+      containerTopic: containerpowerlevel
+      nodeTopic: nodepowerlevel
+      brokers: telemetry-kafka-bootstrap.observability-kafka.svc.cluster.local:9092
+      version: 3.4.0
+      max_message_bytes: 9000000
+      encoding: otlp_json
+
+
+  containerExporter:
+    enabled: true
+
+  nodeExporter:
+    enabled: true
+
+
+
+
+
+
+

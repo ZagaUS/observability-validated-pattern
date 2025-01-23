@@ -1,0 +1,75 @@
+apm-keycloak:
+  replicaCount: 1
+  image:
+    repository: "quay.io/zagaos/zagaobserve-apm-keycloak"
+    tag: "62c5a7a-20241218113250"
+    pullPolicy: IfNotPresent
+  service:
+    type: ClusterIP
+    port: 8080
+
+  route:
+    enabled: true
+    subdomainName: apm-keycloak
+
+
+infra-keycloak:
+  replicaCount: 1
+  image:
+    repository: "quay.io/zagaos/zagaobserve-infra-keycloak"
+    tag: "5bb194d-20241214050907"
+    pullPolicy: IfNotPresent
+  service:
+    type: ClusterIP
+    port: 8080
+
+  route:
+    enabled: true
+    subdomainName: infra-keycloak
+
+casemanage-keycloak:
+  replicaCount: 1
+  image:
+    repository: "quay.io/zagaos/zagaobserve-casemanage-keycloak"
+    tag: "42adbcd-20241218115704"
+    pullPolicy: IfNotPresent
+  service:
+    type: ClusterIP
+    port: 8080
+
+  route:
+    enabled: true
+    subdomainName: casemanage-keycloak
+
+
+
+edge-keycloak:
+  replicaCount: 1
+  image:
+    repository: "quay.io/zagaos/zagaobserve-edge-keycloak"
+    tag: "a3eb3c0-20241218045514"
+    pullPolicy: IfNotPresent
+  service:
+    type: ClusterIP
+    port: 8080
+
+  route:
+    enabled: true
+    subdomainName: edge-keycloak
+
+
+
+
+
+casemanageKeycloak:
+  enabled: true
+
+infraKeycloak:
+  enabled: false
+
+
+apmKeycloak:
+  enabled: false
+
+edgeKeycloak:
+  enabled: true

@@ -1,0 +1,25 @@
+replicaCount: 1
+
+image:
+  repository:  quay.io/zagaos/zagaobserve-sustain-ingestion
+  tag: v1
+  pullPolicy: IfNotPresent
+
+configmapEnv:
+  data:
+    ACCESS_KEY: minioAdmin
+    KAFKA_BOOTSTRAP_SERVER: 'telemetry-kafka-bootstrap.observability-kafka.svc.cluster.local:9092'
+    S3_ENDPOINT: 'http://minio.observability-datamesh.svc.cluster.local:9000'
+    SECRET_KEY: minio1234
+    URI: 'thrift://hive-metastore.observability-datamesh.svc.cluster.local:9083'
+    BUCKET_NAME: 's3a://powerlevel-data/powerdatas'
+    CONSUMER_GROUP_ID: sustain
+    KAFKA_TOPIC: containerpowerlevel
+    NAME_SPACE: sustainability_pod
+    SCRIPT_TO_RUN: podpowerlevel
+    TABLE_NAME: pod
+    SSL: False
+    MINIO_BUCKET: powerlevel-data
+
+ingestion:
+  enabled: true # Set to false if you don't want to deploy casemgt-backend-api

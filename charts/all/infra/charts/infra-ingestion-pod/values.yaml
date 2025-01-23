@@ -1,0 +1,25 @@
+replicaCount: 1
+
+image:
+  repository: quay.io/zagaos/zagaobserver-infra-ingestion
+  tag: latest
+  pullPolicy: IfNotPresent
+
+configmapEnv:
+  data:
+    KAFKA_TOPIC: podstats
+    SSL: "False"
+    MINIO_BUCKET: observability-infra-pod
+    TABLE_NAME: pod
+    NAME_SPACE: infra_pod
+    CONSUMER_GROUP_ID: 'pod_ingestion'
+    SCRIPT_TO_RUN: pod
+    BUCKET_NAME: 's3a://observability-infra-pod/pod'
+    KAFKA_BOOTSTRAP_SERVER: 'telemetry-kafka-bootstrap.observability-kafka.svc.cluster.local:9092'
+    URI: 'thrift://hive-metastore.observability-datamesh.svc.cluster.local:9083'
+    S3_ENDPOINT: 'http://minio.observability-datamesh.svc.cluster.local:9000'
+    ACCESS_KEY: minioAdmin
+    SECRET_KEY: minio1234
+
+ingestion:
+  enabled: true # Set to false if you don't want to deploy casemgt-backend-api

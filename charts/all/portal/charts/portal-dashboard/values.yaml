@@ -1,0 +1,15 @@
+replicaCount: 1
+image:
+  repository: quay.io/zagaos/zagaobserve-portal-dashboard
+  tag: "latest"
+  pullPolicy: IfNotPresent
+service:
+  type: ClusterIP
+  port: 8080
+route:
+  subdomain: portal-dashboard
+backend:
+  enabled: false
+
+dashboard:
+  enabled: true

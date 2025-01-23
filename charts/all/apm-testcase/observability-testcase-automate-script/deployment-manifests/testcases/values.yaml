@@ -1,0 +1,87 @@
+# testcase-script:
+
+replicaCount: 1
+
+containerName: ""
+
+image:
+  registry: quay.io
+  username: zagaos
+  name: testcases-script-automate
+  pullPolicy: IfNotPresent
+  tag: v5
+  strategy: ""
+
+languageFramework: python
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+podAnnotations: {}
+
+podSecurityContext: {}
+
+securityContext: {}
+
+serviceAccount:
+  create: false
+  annotations: {}
+  name: ""
+
+
+ports:
+  - name: http
+    subdomainName: testcases-script-automate
+    port: 5085
+    protocol: TCP
+    targetPort: 5085
+    routePolicy:
+      termination: edge
+      insecureEdgeTerminationPolicy: Redirect
+
+service:
+  - enabled: true
+    serviceType: ClusterIP
+    name: testcases-script-automate
+  - enabled: true
+    serviceType: LoadBalancer
+    name: testcases-script-automate-lb
+
+routes:
+    enabled: true
+    tls: true
+    annotations: {}
+
+ingress:
+  enabled: false
+  className: ""
+  tls: false
+  annotations: {}
+
+secretsEnv: {}
+
+configmapEnv: {}
+
+env: {}
+
+probes:
+  readiness:
+  liveness:
+
+volumes: {}
+
+resources: {}
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 3
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}

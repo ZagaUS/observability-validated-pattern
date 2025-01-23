@@ -1,0 +1,21 @@
+apiVersion: v2
+name: keycloak
+description: A Helm chart for keycloak
+
+version: 1.0.0
+
+dependencies:
+
+- name: keycloakdb
+  version: "1.0.0"
+  repository: "file://charts/keycloakdb"
+  condition: subcharts.keycloakdb
+  tags:
+  - keycloakdb
+
+- name: keycloak
+  version: "1.0.0"
+  repository: "file://charts/keycloak"
+  condition: subcharts.keycloak
+  tags:
+  - keycloak

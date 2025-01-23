@@ -1,0 +1,28 @@
+replicaCount: 1
+
+image:
+  repository: quay.io/zagaos/admin-backend-pyiceberg
+  tag: v23
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 8000
+
+route:
+  enabled: true
+  subdomainName: admin-backend
+
+configmapEnv:
+  data:
+    POSTGRES_USER: admin
+    POSTGRES_PASSWORD: admin123$
+    POSTGRES_HOST: admin-postgres.observability-edge.svc.cluster.local
+    POSTGRES_PORT: '5432'
+    POSTGRES_DB: admindb
+    POSTGRESQL_ADMIN_PASSWORD: Admin123$
+    
+
+backend:
+  enabled: true 
+

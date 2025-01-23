@@ -1,0 +1,29 @@
+replicaCount: 1
+
+image:
+  websocket:
+    repository: quay.io/zagaos/otel-kafka-websocket-python
+    tag: v10
+    pullPolicy: IfNotPresent
+  
+
+service:
+  type: ClusterIP
+  port: 8000
+
+route:
+  enabled: true
+  subdomainName: otel-kafka-websocket-python
+  
+configmapEnv:
+  data:
+    ENVIRONMENT: production
+    METRIC_KAFKA_TOPIC: apmmetrics
+    NODE_KAFKA_TOPIC: nodestats
+    POD_KAFKA_TOPIC: podstats
+    POD_POWERLEVEL_KAFKA_TOPIC: containerpowerlevel
+    NODE_POWERLEVEL_KAFKA_TOPIC: nodepowerlevel
+    KAFKA_BOOTSTRAP_SERVER: telemetry-kafka-bootstrap.observability-kafka.svc.cluster.local:9092
+    ADMIN_API_URL: https://admin-backend.apps.rosa-8grhg.ssnp.p1.openshiftapps.com
+websocket:
+  enabled: true

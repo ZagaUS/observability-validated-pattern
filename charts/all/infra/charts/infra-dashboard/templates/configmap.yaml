@@ -1,0 +1,17 @@
+{{- if .Values.dashboard.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Chart.Name }}-configmap
+  labels:
+    app: {{ .Chart.Name }}
+data:
+  config.json: |
+      {
+        "clusterUrl": "https://infra-query.apps.rosa-8grhg.ssnp.p1.openshiftapps.com",
+        "adminBackendURL": "https://admin-backend.apps.rosa-8grhg.ssnp.p1.openshiftapps.com",
+        "websocketURL": "wss://otel-kafka-websocket-python.apps.rosa-8grhg.ssnp.p1.openshiftapps.com"
+      }
+
+{{- end }}
+

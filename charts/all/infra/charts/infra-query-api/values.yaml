@@ -1,0 +1,24 @@
+replicaCount: 1
+
+image:
+  repository: quay.io/zagaos/zagaobserver-infra-query
+  tag: v2
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 8000
+
+route:
+  enabled: true
+  subdomainName: infra-query
+
+configmapEnv:
+  data:
+    NODE_TABLE_NAME: iceberg.infra_node.node
+    POD_TABLE_NAME: iceberg.infra_pod.pod
+    EVENT_TABLE_NAME: iceberg.infra_event.event
+    TRINO_HOST: admin@trino-coordinator.observability-datamesh.svc.cluster.local:8080
+    ADMIN_API_URL: https://admin-backend.apps.rosa-8grhg.ssnp.p1.openshiftapps.com
+query:
+  enabled: true

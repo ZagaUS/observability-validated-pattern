@@ -1,0 +1,159 @@
+apiVersion: opentelemetry.io/v1alpha1
+kind: OpenTelemetryCollector
+metadata:
+  name: {{ .Chart.Name }}
+spec:
+  observability:
+    metrics: {}
+  deploymentUpdateStrategy: {}
+  config: |
+    exporters:
+      debug:
+        verbosity: detailed
+      kafka/kubeletstats-node:
+        brokers:
+          {{ toYaml .Values.kafka.brokers | indent 10 }}
+        encoding: otlp_json
+        producer:
+          max_message_bytes: {{ .Values.kafka.producerMaxMessageBytes }}
+        protocol_version: {{ .Values.kafka.protocolVersion }}
+        topic: {{ .Values.nodeStatsTopic }}
+
+      kafka/kubeletstats-pod:
+        brokers:
+          {{ toYaml .Values.kafka.brokers | indent 10 }}
+        encoding: otlp_json
+        producer:
+          max_message_bytes: {{ .Values.kafka.producerMaxMessageBytes }}
+        protocol_version: {{ .Values.kafka.protocolVersion }}
+        topic: {{ .Values.podStatsTopic }}
+    extensions:
+      health_check:
+        check_collector_pipeline:
+          enabled: true
+          exporter_failure_threshold: 5
+          interval: 5m
+        endpoint: null
+      k8s_observer:
+        auth_type: serviceAccount
+        node: '${K8S_NODE_NAME}'
+        observe_nodes: true
+        observe_pods: true
+      memory_ballast:
+        size_in_percentage: 20
+    processors:
+      batch:
+        send_batch_size: 5000
+        send_batch_max_size: 5000
+      resourcedetection/openshift:
+        detectors:
+          - openshift
+      attributes/nodename-insert:
+        actions:
+          - key: "k8s.node.name"
+            value: ${K8S_NODE_NAME}
+            action: insert
+      resource/clusterinfo:
+        attributes:
+          - action: insert
+            key: k8s.cluster.type
+            value: multi-node-cluster
+          - action: insert
+            key: k8s.cluster.name
+            value: ${K8S_NODE_NAME}
+    receivers:
+      kubeletstats/node:
+        auth_type: serviceAccount
+        collection_interval: 5s
+        endpoint: 'https://${env:K8S_NODE_NAME}:10250'
+        initial_delay: 1s
+        insecure_skip_verify: true
+        metric_groups:
+          - node
+        metrics:
+          k8s.node.cpu.usage:
+            enabled: true
+          k8s.node.cpu.utilization:
+            enabled: false
+      kubeletstats/pod:
+        auth_type: serviceAccount
+        collection_interval: 5s
+        endpoint: 'https://${env:K8S_NODE_NAME}:10250'
+        initial_delay: 1s
+        insecure_skip_verify: true
+        metric_groups:
+          - pod
+        metrics:
+          k8s.pod.cpu.usage:
+            enabled: true
+          k8s.pod.cpu.utilization:
+            enabled: false
+      otlp:
+        protocols:
+          grpc: 
+            endpoint: "0.0.0.0:4317"
+          http:
+            endpoint: "0.0.0.0:4318"
+    service:
+      extensions:
+        - k8s_observer
+        - memory_ballast
+      pipelines:
+        metrics/kubelet-node:
+          exporters:
+            - debug
+          processors:
+            - batch
+            - resource/clusterinfo
+            - attributes/nodename-insert
+            - resourcedetection/openshift
+          receivers:
+            - kubeletstats/node
+        metrics/kubelet-pod:
+          exporters:
+            - debug
+          processors:
+            - batch
+            - resource/clusterinfo
+            - attributes/nodename-insert
+            - resourcedetection/openshift
+          receivers:
+            - kubeletstats/pod
+      telemetry:
+        logs:
+          level: debug
+        metrics:
+          address: ':8888'
+  mode: daemonset
+  resources:
+    limits:
+      cpu: {{ .Values.resources.limits.cpu }}
+      memory: {{ .Values.resources.limits.memory }}
+    requests:
+      cpu: {{ .Values.resources.requests.cpu }}
+      memory: {{ .Values.resources.requests.memory }}
+  env:
+    - name: K8S_NODE_NAME
+      valueFrom:
+        fieldRef:
+          fieldPath: spec.nodeName
+  managementState: managed
+  upgradeStrategy: automatic
+  ingress:
+    route: {}
+  targetAllocator:
+    allocationStrategy: consistent-hashing
+    filterStrategy: relabel-config
+    observability:
+      metrics: {}
+    prometheusCR:
+      podMonitorSelector: {}
+      scrapeInterval: 30s
+      serviceMonitorSelector: {}
+    resources: {}
+  image: {{ .Values.image }}
+  replicas: 1
+  tolerations:
+{{ toYaml .Values.tolerations | indent 4 }}
+  podDisruptionBudget:
+    maxUnavailable: 1

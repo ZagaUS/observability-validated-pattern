@@ -1,0 +1,47 @@
+config:
+  target: "{{ $processEnvironment.TARGET_URL }}"
+  phases:
+    - duration: 10
+      arrivalRate: 1
+  defaults:
+    headers:
+      content-type: application/json
+
+  variables:
+    productIds: [1, 2, 3, 4, 5] # A list of product IDs
+    productNames: ["Product A", "Product B", "Product C", "Product D"]
+    customerNames: ["Alice Smith", "Bob Jones", "Carol White", "Dave Green"]
+    addresses: ["100 Main St", "200 Side St", "300 Oak Rd", "400 Pine Ave"]
+
+scenarios:
+  - flow:
+      - post:
+          url: "/orders/createOrders"
+          json:
+            productId: "{{ productIds | random }}"
+            productName: "{{ productNames | random }}"
+            orderId: "{{ $loopCount }}"  # Unique order ID for each request
+            customerId: "{{ $randomNumber(1,100)}}" # Random customer ID
+            customerName: "{{ customerNames | random }}"
+            customerPhoneNumber: "{{ $randomNumber(1,100) }}"
+            modelNo: "Model {{ $loopCount }}"
+            productAddress: "{{ addresses | random }}"
+            quantity: "{{ Math.floor(Math.random() * 10) + 1 }}" # Random quantity between 1 and 10
+      - post:
+          url: "/orders/createErrorOrders"
+          json:
+            productId: "{{ productIds | random }}"
+            productName: "{{ productNames | random }}"
+            orderId: "{{ $loopCount + 1000 }}"
+            customerId: "{{ $randomNumber(1,100)}}"
+            customerName: "{{ customerNames | random }}"
+            customerPhoneNumber: "{{ $randomNumber(1,100) }}"
+            modelNo: "Model {{ $loopCount + 100 }}"
+            productAddress: "{{ addresses | random }}"
+            quantity: "{{ Math.floor(Math.random() * 10) + 1 }}"
+      - get:
+          url: "/orders/getOrders"
+          qs:
+            id: "{{$randomNumber(1,100)}}" # Retrieves an order by dynamic ID
+      - get:
+          url: "/orders/getAllOrders"

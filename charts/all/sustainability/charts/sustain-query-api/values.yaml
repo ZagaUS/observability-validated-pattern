@@ -1,0 +1,23 @@
+replicaCount: 1
+
+image:
+  repository: quay.io/zagaos/sustain-query
+  tag: latest
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 8000
+
+route:
+  enabled: true
+  subdomainName: sustain-query
+
+configmapEnv:
+  data:
+    SUSTAIN_TABLE_NAME: iceberg.sustainability_pod.pod
+    NODE_TABLE_NAME: iceberg.sustainability_node.node
+    TRINO_HOST: admin@trino-coordinator.observability-datamesh.svc.cluster.local
+    ADMIN_API_URL: https://admin-backend.apps.rosa-8grhg.ssnp.p1.openshiftapps.com
+query:
+  enabled: true

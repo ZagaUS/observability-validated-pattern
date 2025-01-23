@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}
+  labels:
+    app: central-redis
+    release: {{ .Release.Name }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: central-redis
+      release: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: central-redis
+        release: {{ .Release.Name }}
+    spec:
+      containers:
+      - name: redis
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        ports:
+        - containerPort: 6379
+        resources:
+          limits:
+            cpu: {{ .Values.resources.limits.cpu }}
+            memory: {{ .Values.resources.limits.memory }}
+          requests:
+            cpu: {{ .Values.resources.requests.cpu }}
+            memory: {{ .Values.resources.requests.memory }}
+        volumeMounts:
+        - name: redis-data
+          mountPath: /data
+        - name: log-data
+          mountPath: /redisinsight/logs
+        - mountPath: /usr/local/etc/redis/redis.conf
+          subPath: redis.conf
+          name: redis-config
+      volumes:
+      - name: redis-data
+        emptyDir: {}
+      - name: log-data
+        emptyDir: {}
+      - name: redis-config
+        configMap:
+          name: redis-stack-config

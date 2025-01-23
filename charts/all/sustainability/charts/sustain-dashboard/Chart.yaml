@@ -1,0 +1,6 @@
+apiVersion: v2
+name: sustain-dashboard
+description: A Helm chart for sustain dashboard
+type: application
+
+version: 1.0.0

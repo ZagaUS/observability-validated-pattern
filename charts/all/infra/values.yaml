@@ -1,0 +1,102 @@
+infra-ingestion-node:
+  replicaCount: 1
+  image:
+    repository: "quay.io/zagaos/zagaobserve-infra-ingestion"
+    tag: "v1"
+    pullPolicy: IfNotPresent
+  configmapEnv:
+    data:
+      KAFKA_TOPIC: nodestats
+      SSL: "False"
+      MINIO_BUCKET: observability-infra-node
+      TABLE_NAME: node
+      NAME_SPACE: infra_node
+      CONSUMER_GROUP_ID: 'node_ingestion'
+      SCRIPT_TO_RUN: node
+      BUCKET_NAME: 's3a://observability-infra-node/node'
+      KAFKA_BOOTSTRAP_SERVER: 'telemetry-kafka-bootstrap.observability-kafka.svc.cluster.local:9092'
+      URI: 'thrift://hive-metastore.observability-datamesh.svc.cluster.local:9083'
+      S3_ENDPOINT: 'http://minio.observability-datamesh.svc.cluster.local:9000'
+      ACCESS_KEY: minioAdmin
+      SECRET_KEY: minio1234
+######################
+infra-ingestion-pod:
+  replicaCount: 1
+  image:
+    repository: "quay.io/zagaos/zagaobserve-infra-ingestion"
+    tag: "v1"
+    pullPolicy: IfNotPresent
+  configmapEnv:
+    data:
+      KAFKA_TOPIC: podstats
+      SSL: "False"
+      MINIO_BUCKET: observability-infra-pod
+      TABLE_NAME: pod
+      NAME_SPACE: infra_pod
+      CONSUMER_GROUP_ID: 'pod_ingestion'
+      SCRIPT_TO_RUN: pod
+      BUCKET_NAME: 's3a://observability-infra-pod/pod'
+      KAFKA_BOOTSTRAP_SERVER: 'telemetry-kafka-bootstrap.observability-kafka.svc.cluster.local:9092'
+      URI: 'thrift://hive-metastore.observability-datamesh.svc.cluster.local:9083'
+      S3_ENDPOINT: 'http://minio.observability-datamesh.svc.cluster.local:9000'
+      ACCESS_KEY: minioAdmin
+      SECRET_KEY: minio1234
+######################
+infra-ingestion-events:
+  replicaCount: 1
+  image:
+    repository: "quay.io/zagaos/zagaobserve-infra-ingestion"
+    tag: "v1"
+    pullPolicy: IfNotPresent
+  configmapEnv:
+    data:
+      KAFKA_TOPIC: k8sevents
+      SSL: "False"
+      MINIO_BUCKET: observability-infra-events
+      TABLE_NAME: event
+      NAME_SPACE: infra_event
+      CONSUMER_GROUP_ID: event_ingestion
+      SCRIPT_TO_RUN: event
+      BUCKET_NAME: s3a://observability-infra-events/events
+      KAFKA_BOOTSTRAP_SERVER: 'telemetry-kafka-bootstrap.observability-kafka.svc.cluster.local:9092'
+      URI: 'thrift://hive-metastore.observability-datamesh.svc.cluster.local:9083'
+      S3_ENDPOINT: 'http://minio.observability-datamesh.svc.cluster.local:9000'
+      ACCESS_KEY: minioAdmin
+      SECRET_KEY: minio1234
+#####################
+infra-query-api:
+  replicaCount: 1
+  image:
+    repository: "quay.io/zagaos/zagaobserve-infra-query"
+    tag: "v2"
+    pullPolicy: IfNotPresent
+  service:
+    type: ClusterIP
+    port: 8000
+  route:
+    subdomain: infra-query
+  configmapEnv:
+    data:
+      NODE_TABLE_NAME: iceberg.infra_node.node
+      POD_TABLE_NAME: iceberg.infra_pod.pod
+      EVENT_TABLE_NAME: iceberg.infra_event.event
+      TRINO_HOST: admin@trino-coordinator.observability-datamesh.svc.cluster.local:8080
+      ADMIN_API_URL: https://admin-backend.apps.rosa-8grhg.ssnp.p1.openshiftapps.com
+######################
+infra-dashboard:
+  replicaCount: 1
+  image:
+    repository: "quay.io/zagaos/zagaobserve-infra-dashboard"
+    tag: "v12"
+    pullPolicy: IfNotPresent
+  service:
+    type: ClusterIP
+    port: 8080
+  route:
+    subdomain: infra-dashboard
+ingestion:
+  enabled: true
+dashboard:
+  enabled: true
+query:
+  enabled: true

@@ -1,0 +1,16 @@
+{{- if .Values.dashboard.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Chart.Name }}-configmap
+  labels:
+    app: {{ .Chart.Name }}
+data:
+  config.json: |
+    {
+      "openshiftLoginURL": "https://infra-query.apps.rosa-8grhg.ssnp.p1.openshiftapps.com",
+      "loginURL": "https://admin-backend.apps.rosa-8grhg.ssnp.p1.openshiftapps.com/clusters",
+      "rulesurl": "https://admin-backend.apps.rosa-8grhg.ssnp.p1.openshiftapps.com/rules"
+
+    }
+{{- end }}

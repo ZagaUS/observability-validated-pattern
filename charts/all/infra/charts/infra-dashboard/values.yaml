@@ -1,0 +1,18 @@
+infra-dashboard:
+
+replicaCount: 1
+
+image:
+  repository: "quay.io/zagaos/zagaobserve-infra-dashboard"
+  tag: "v11"
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 8080
+
+route:
+  subdomain: infra-dashboard
+
+dashboard:
+  enabled: true
