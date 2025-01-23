@@ -1,9 +1,0 @@
-apiVersion: v2
-name: sustain-query-api
-description: A Helm chart for sustain query api
-
-type: application
-
-version: 1.0.0
-
-appVersion: "1.0.0"

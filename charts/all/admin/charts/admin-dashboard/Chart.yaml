@@ -1,6 +1,0 @@
-apiVersion: v2
-name: admin-dashboard
-description: A Helm chart for admin dashboard
-type: application
-
-version: 1.0.0

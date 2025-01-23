@@ -1,9 +1,0 @@
-apiVersion: v2
-name: infra-ingestion-node
-description: A Helm chart for infra ingestion node
-
-type: application
-
-version: 1.0.0
-
-appVersion: "1.0.0"

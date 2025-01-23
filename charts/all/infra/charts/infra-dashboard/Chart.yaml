@@ -1,6 +1,0 @@
-apiVersion: v2
-name: infra-dashboard
-description: A Helm chart for infra dashboard
-type: application
-
-version: 1.0.0
